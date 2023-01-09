@@ -66,32 +66,31 @@ class Main {
             List<Double> x_list = new ArrayList<Double>();
             List<Double> y_list = new ArrayList<Double>();
             x_list.add(0.0);
-            y_list.add(4000
+            y_list.add(4000.0);
 
-            double.);
-        int jndx = 0;
-        while (jndx < 20 && curr_y > 0 && !(curr_y >= 4000 && jndx > 0)) {
-            jndx++;
-            int next_i;
-            if (angle < 90) {
-                next_i = indx - 1;
-            } else if (angle > 90) {
-                next_i = indx + 1;
-            } else {
-                next_i = indx;
-            }
-            double next_y;
-            try {
-                next_y = atm_height_list.get(next_i);
-            } catch (IndexOutOfBoundsException e) {
-                if (next_i == 0) {
-                    jndx = 20;
-                    next_y = 4000;
+            int jndx = 0;
+            while (jndx < 20 && curr_y > 0 && !(curr_y >= 4000 && jndx > 0)) {
+                jndx++;
+                int next_i;
+                if (angle < 90) {
+                    next_i = indx - 1;
+                } else if (angle > 90) {
+                    next_i = indx + 1;
                 } else {
-                    jndx = 20;
-                    next_y = 0;
+                    next_i = indx;
                 }
-            }
+                double next_y;
+                try {
+                    next_y = atm_height_list.get(next_i);
+                } catch (IndexOutOfBoundsException e) {
+                    if (next_i == 0) {
+                        jndx = 20;
+                        next_y = 4000;
+                    } else {
+                        jndx = 20;
+                        next_y = 0;
+                    }
+                }
             double next_x = get_next_x(curr_x, curr_y, angle, next_y);
             x_list.add(next_x);
             y_list.add(next_y);
@@ -129,8 +128,8 @@ frame.setVisible(true);
         return std_atm_height_list.indexOf(height);
     }
 
-    static double get_next_x(double curr_
-                             double curr_y, int angle, double next_y) {
+    static double get_next_x(double curr_x,
+                             double curr_y, double angle, double next_y) {
         double rangle = Math.toRadians(angle);
         double delta_y = curr_y - next_y;
         double delta_x = delta_y * Math.tan(rangle);
