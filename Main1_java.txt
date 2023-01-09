@@ -1,0 +1,51 @@
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.lang.Math;
+
+public class src.Main {
+    public static void main(String[] args) {
+        int[][] std_atm = {{0, 101325, 15, 17.1}, {1000, 89880, 8.50, 11.1}, {2000, 79500, 2.00, 7.1}, {3000, 70012, -4.49, 0}, {4000, 61660, -10.98, 0}}; // list of tuples: (height, pressure, temperature)
+        int[][] atm_w_density = {{}}; // (height, pressure, temperature, sat_vp, dry_density, humid_density, sp_sound)
+        int[] atm_height_list = {}; // height
+        int t_base = 4000; // (base of cumulonimbus, assumed to be source of lightning, 200 m to 4000 m)
+        atm_w_density = build_atm_w_density(std_atm);
+        atm_height_list = build_atm_height_list(std_atm);
+        int start_i = get_start_idx(t_base, atm_height_list);
+        List<List<Object>> graph_list = new ArrayList<>();
+        for (int andx = 0; andx < 22; andx++) {
+            int s_angle = 4 * andx;
+            int angle = s_angle;
+            int curr_y = t_base;
+            int curr_x = 0;
+            int indx = start_i;
+            List<Double> x_list = new ArrayList<>();
+            List<Double> y_list = new ArrayList<>();
+            x_list.add(0.0);
+            y_list.add(4000.0);
+            int jndx = 0;
+            while (jndx < 20 && curr_y >0 && !(curr_y >= 4000 && jndx > 0)) {
+                jndx = jndx +1;
+                int next_i = 0;
+                if (angle < 90) {
+                    next_i = indx - 1;
+                } else if (angle > 90) {
+                    next_i = indx + 1;
+                } else {
+                    next_i = indx;
+                }
+                System.out.println(curr_x + ", " + curr_y + ", " + angle);
+                try {
+                    int next_y = atm_height_list[next_i];
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    if (next_i == 0) {
+                        jndx = 20;
+                        int next_y = 4000;
+                    } else {
+                        jndx = 20;
+                        int next_y = 0;
+                    }
+                }
+                double next_x = get_next_x(curr_x, curr_y, angle, next_y);
+                System.out.println(curr_x + ", " + curr_y + ", " + next_x + ", " + next_y + ", " + angle);
+                x_list.add
